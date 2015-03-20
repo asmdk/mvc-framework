@@ -4,51 +4,53 @@ class Route
 {
     public static function start()
     {
-        // контроллер и действие по умолчанию
-        $controllerPrefix = 'Main';
-        $actionPrefix = 'Index';
-        
-        $routes = explode('/', $_SERVER['REQUEST_URI']);
+        // default controller and action
+        $controllerClassName = is_null(Config::get('DefaultController')) ? '' : Config::get('DefaultController');
+        $actionDefault = is_null(Config::get('DefaultAction')) ? 'Index' : Config::get('DefaultAction');
 
-        // получаем имя контроллера
-        if ( !empty($routes[1]) )
-        {	
-            $controllerPrefix = $routes[1];
-        }
-        
-        // получаем имя экшена
-        if ( !empty($routes[2]) )
-        {
-            $actionPrefix = $routes[2];
+        //remove get params from route uri
+        $bGet = strpos($_SERVER['REQUEST_URI'], '?');
+        $serverUri = $bGet !== false ? substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], '?')) : $_SERVER['REQUEST_URI'];
+        $routes = explode('/', $serverUri);
+        array_shift($routes);
+
+        //remove index php from routes
+        if (!empty($routes)&& $routes[0] == 'index.php') {
+            array_shift($routes);
         }
 
-        // добавляем префиксы
-        $model_name = $controllerPrefix.'Model';
-        $controller_name = $controllerPrefix.'Controller';
-        $action_name = 'action'.ucfirst($actionPrefix);
+        // get controller name
+        if ( !empty($routes) ) {
+            $controllerClassName = array_shift($routes);
+        }
         
-        // создаем контроллер
-        $controller = new $controller_name($controllerPrefix, $action_name);
-		$action = $action_name;
+        // get action name
+        if ( !empty($routes) ) {
+            $actionDefault = array_shift($routes);
+        }
+
+        //set params
+        if ( !empty($routes) ) {
+            $rCount = count($routes);
+            for($index = 0; $index < $rCount; $index += 2) {
+                $_GET[$routes[$index]] = isset($routes[$index+1]) ? $routes[$index+1] : null;
+            }
+        }
+
+        // add prefix
+        $controllerClass = $controllerClassName.'Controller';
+        $actionName = 'action'.ucfirst($actionDefault);
         
-        if(method_exists($controller, $action))
-        {
-            // вызываем действие контроллера
+        // create controller
+        try {
+            $controller = new $controllerClass($controllerClassName, $actionName);
+            $action = $actionName;
+            // call action
             $controller->$action();
         }
-        else
-        {
-            // здесь также разумнее было бы кинуть исключение
-            Route::ErrorPage404();
+        catch (ExtException $e) {
+            throw new ExtException($e->getMessage());
         }
     
-    }
-    
-    public static function ErrorPage404()
-    {
-        $host = 'http://'.$_SERVER['HTTP_HOST'].'/';
-        header('HTTP/1.1 404 Not Found');
-        header("Status: 404 Not Found");
-        header('Location:'.$host.'404');
     }
 }

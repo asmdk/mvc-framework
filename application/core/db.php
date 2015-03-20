@@ -28,7 +28,7 @@ class Db
         $settings = Config::get('db');
         if (!empty($settings)) {
             try {
-                $dsn = 'mysql:host='.$settings['host'].';dbname='.$settings['name'].';port='.$settings['port'].';charset='.$settings['charset'];
+                $dsn = $settings['driver'].':host='.$settings['host'].';dbname='.$settings['name'].';port='.$settings['port'];
                 self::$db = new PDO($dsn, $settings['user'], $settings['pass']);
                 self::$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 self::$db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);

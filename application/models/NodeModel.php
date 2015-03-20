@@ -8,10 +8,20 @@
 
 class NodeModel extends Model {
 
+    protected function tableName()
+    {
+        return 'Node';
+    }
+
+    protected function primaryKey()
+    {
+        return array('nid');
+    }
+
     public function getNodeList()
     {
         $sql = 'SELECT * FROM NODE';
-        $nodes = $this->execSql($sql);
+        $nodes = $this->execute($sql);
         return $nodes;
     }
 

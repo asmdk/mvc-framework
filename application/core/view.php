@@ -11,23 +11,39 @@
 		{
 			$this->controller = $controller;
             $this->templateView = VIEWS.'layout'.DS.$controller->layout.'.php';
+            $this->tplFilePath = VIEWS.strtolower($this->controller->name).DS;
 		}
+
+        public function setTplFilePath($path)
+        {
+            $this->tplFilePath = $path;
+        }
+
+        public function setTemplateView($path)
+        {
+            $this->templateView = $path;
+        }
 
         private function generate($content_view, $data = null)
         {
             $content = '';
             $this->tplName = $content_view;
-            $this->tplFilePath = VIEWS.strtolower($this->controller->name).DS.$content_view.'.php';
+            $this->tplFilePath .= $content_view.'.php';
             if(!empty($data) && is_array($data)) {
                 // преобразуем элементы массива в переменные
                 extract($data);
             }
 
             if (file_exists($this->templateView)) {
-                ob_start();
-                include $this->tplFilePath;
-                $content = ob_get_contents();
-                ob_end_clean();
+                try {
+                    ob_start();
+                    include $this->tplFilePath;
+                    $content = ob_get_contents();
+                    ob_end_clean();
+                }
+                catch (ExtException $e) {
+                    throw new ExtException($e->getMessage());
+                }
             }
             else {
                 throw new Exception('Layout not found: '.$this->templateView);
@@ -43,7 +59,7 @@
                 include $this->templateView;
             }
             else {
-                throw new Exception('Layout not found: '.$this->templateView);
+                throw new ExtException('Layout not found: '.$this->templateView);
             }
 		}
 

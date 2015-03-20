@@ -7,10 +7,13 @@
  */
 
     Config::set('db', array(
+        'driver'=>'mysql',
         'host'=>'localhost',
         'name'=>'mvc',
         'user'=>'root',
         'pass'=>'root',
-        'charset'=>'UTF-8',
         'port'=>3306,
     ));
+
+    Config::set('DefaultController', 'Main');
+    Config::set('DefaultAction', 'Index');
