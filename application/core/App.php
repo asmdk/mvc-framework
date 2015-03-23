@@ -12,6 +12,7 @@ class App {
           'Model'=>'Model.php',
           'View'=>'View.php',
           'Controller'=>'Controller.php',
+          'Action'=>'Action.php',
           'Route'=>'Route.php',
           'Config'=>'Config.php',
           'Db'=>'Db.php',

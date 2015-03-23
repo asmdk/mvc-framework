@@ -39,7 +39,7 @@ abstract class Model
      */
     private function primaryKeyParams($params)
     {
-        if (!is_array($params)) $params = array($params);
+        if (!is_array($params) && !is_object($params)) $params = array($params);
         $pk = $this->primaryKey();
 
         if (count($params) <= count($pk)) {
@@ -172,7 +172,8 @@ abstract class Model
         $table = $this->tableName();
         list($data, $condition) = $this->primaryKeyParams($this->attributes);
         $sql = "DELETE FROM {$table} WHERE ({$condition})";
-        return $this->db->exec($sql, $data);
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute($data);
     }
 
     /**

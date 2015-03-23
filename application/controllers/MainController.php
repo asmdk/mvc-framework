@@ -1,15 +1,22 @@
 <?php
 
-	class MainController extends Controller
+class MainController extends Controller
 {
-    function actionIndex()
+    protected function actions()
+    {
+        return array(
+            'export'=>'ExportAction',
+        );
+    }
+
+    public function actionIndex()
     {
         $model = new NodeModel();
         $nodes = $model->getNodeList();
         $this->view->render('index', array('nodes'=>$nodes));
     }
 
-    function actionView()
+    public function actionView()
     {
         $id = App::$request->getParam('id');
         $model = new NodeModel();
@@ -17,7 +24,7 @@
         $this->view->render('view', array('node'=>$model->getAttributes()));
     }
 
-    function actionAdd()
+    public function actionAdd()
     {
         $model = new NodeModel();
         $model->setAttributes(
@@ -27,10 +34,9 @@
             )
         );
         $model->save();
-        var_dump($model);exit;
     }
 
-    function actionUpdate()
+    public function actionUpdate()
     {
         $id = App::$request->getParam('id');
         $model = new NodeModel();
@@ -38,5 +44,14 @@
         $model->setAttribute('title', 'title 5');
         $model->save();
         var_dump($model);exit;
+    }
+
+    public function actionDelete()
+    {
+        $id = App::$request->getParam('id');
+        $model = new NodeModel();
+        $model->findByPk($id);
+        $result = $model->delete();
+        var_dump($result);exit;
     }
 }

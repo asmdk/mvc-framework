@@ -8,7 +8,14 @@
 
 class Request {
 
-    public function __construct() {}
+    public $requestUri;
+    public $serverUri;
+
+    public function __construct() {
+        $bGet = strpos($_SERVER['REQUEST_URI'], '?');
+        $this->requestUri = $bGet !== false ? substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], '?')) : $_SERVER['REQUEST_URI'];
+        $this->serverUri = $_SERVER['REQUEST_URI'];
+    }
 
     public function getGet($key, $default = null)
     {

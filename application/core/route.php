@@ -15,7 +15,7 @@ class Route
         array_shift($routes);
 
         //remove index php from routes
-        if (!empty($routes)&& $routes[0] == 'index.php') {
+        if (!empty($routes)&& ($routes[0] == 'index.php' || empty($routes[0]))) {
             array_shift($routes);
         }
 
@@ -43,10 +43,13 @@ class Route
         
         // create controller
         try {
+            /** @var Controller $controller */
             $controller = new $controllerClass($controllerClassName, $actionName);
             $action = $actionName;
             // call action
-            $controller->$action();
+            if ($controller->checkActionClass($actionDefault) === false) {
+                $controller->$action();
+            }
         }
         catch (ExtException $e) {
             throw new ExtException($e->getMessage());
