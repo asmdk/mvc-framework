@@ -10,9 +10,14 @@
 		public function __construct($controller)
 		{
 			$this->controller = $controller;
-            $this->templateView = VIEWS.'layout'.DS.$controller->layout.'.php';
-            $this->tplFilePath = VIEWS.strtolower($this->controller->name).DS;
+            $this->init();
 		}
+
+        protected function init()
+        {
+            $this->templateView = VIEWS.'layout'.DS.$this->controller->layout.'.php';
+            $this->tplFilePath = VIEWS.strtolower($this->controller->name).DS;
+        }
 
         public function setTplFilePath($path)
         {

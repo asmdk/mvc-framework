@@ -11,6 +11,7 @@ class App {
     private static $_coreClasses = array(
           'Model'=>'Model.php',
           'View'=>'View.php',
+          'ViewTwig'=>'ViewTwig.php',
           'Controller'=>'Controller.php',
           'Action'=>'Action.php',
           'Route'=>'Route.php',
@@ -45,7 +46,7 @@ class App {
             } else if (file_exists(EXTENSIONS.$fileName)) {
                 include_once EXTENSIONS.$fileName;
             } else {
-                throw new Exception('Can\'t load class '.$class);
+                //throw new Exception('Can\'t load class '.$class);
             }
         }
         catch (ExtException $e) {

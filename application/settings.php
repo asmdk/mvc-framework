@@ -17,3 +17,4 @@
 
     Config::set('DefaultController', 'Main');
     Config::set('DefaultAction', 'Index');
+    //Config::set('View', 'ViewTwig');

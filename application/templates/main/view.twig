@@ -1,0 +1,9 @@
+{% extends "default.twig" %}
+{% block title %}{{ node.title }}{% endblock %}
+{% block content %}
+    <h1>{{ node.title }}</h1>
+
+    <div id="header_lower">
+        <div id="header_content_boxcontent">{{ node.body }}</div>
+    </div>
+{% endblock %}

@@ -13,7 +13,8 @@
 		{
 			$this->name = $name;
 			$this->actionName = $actionName;
-			$this->view = new View($this);
+            $viewClass = Config::get('View');
+			$this->view = !empty($viewClass) ? new $viewClass($this) : new View($this);
 		}
 
         /** return array actions classes */
