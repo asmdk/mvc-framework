@@ -8,16 +8,22 @@
 		
 		public $name;
 		public $actionName;
+        public $defaultAction = 'Index';
 
 		function __construct($name, $actionName)
 		{
 			$this->name = $name;
-			$this->actionName = $actionName;
+			$this->actionName = !empty($actionName) ? $actionName : $this->defaultAction;
             $viewClass = Config::get('View');
 			$this->view = !empty($viewClass) ? new $viewClass($this) : new View($this);
 		}
 
-        /** return array actions classes */
+        /** return array actions classes
+         *  return array('action'=>'ExportAction')
+         *
+         *  then you must create folder in Controller/{controller_name|lowercase}/ExportAction.php
+         *  ExportAction extends form Action and override method run()
+         */
         protected function actions()
         {
             return array();

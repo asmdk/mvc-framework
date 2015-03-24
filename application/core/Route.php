@@ -6,7 +6,7 @@ class Route
     {
         // default controller and action
         $controllerClassName = is_null(Config::get('DefaultController')) ? '' : Config::get('DefaultController');
-        $actionDefault = is_null(Config::get('DefaultAction')) ? 'Index' : Config::get('DefaultAction');
+        $actionDefault = is_null(Config::get('DefaultAction')) ? '' : Config::get('DefaultAction');
 
         //remove get params from route uri
         $bGet = strpos($_SERVER['REQUEST_URI'], '?');
@@ -44,8 +44,8 @@ class Route
         // create controller
         try {
             /** @var Controller $controller */
-            $controller = new $controllerClass($controllerClassName, $actionName);
-            $action = $actionName;
+            $controller = new $controllerClass($controllerClassName, $actionDefault);
+            $action = ($actionName == 'action') ? $actionName.$controller->defaultAction : $actionName;
             // call action
             if ($controller->checkActionClass($actionDefault) === false) {
                 $controller->$action();
