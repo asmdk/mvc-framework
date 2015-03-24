@@ -16,9 +16,8 @@ class MainController extends Controller
         $this->view->render('index', array('nodes'=>$nodes));
     }
 
-    public function actionView()
+    public function actionView($id)
     {
-        $id = App::$request->getParam('id');
         $model = new NodeModel();
         $model->findByPk($id);
         $this->view->render('view', array('node'=>$model->getAttributes()));

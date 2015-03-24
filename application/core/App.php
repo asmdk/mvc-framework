@@ -30,7 +30,8 @@ class App {
     public static function init()
     {
         self::$request = new Request();
-        Route::start();
+        $route = new Route(Config::get('routes'));
+        $route->run();
     }
 
     public static function autoload($class) {

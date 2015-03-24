@@ -16,6 +16,7 @@
 
     //load config
     require_once CONFIG.'settings.php';
+    require_once CONFIG.'routes.php';
 
     //start app
     App::init();

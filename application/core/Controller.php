@@ -33,10 +33,11 @@
          * if action have class, include class file and return ClassName
          *
          * @param $action
+         * @param $parameters
          * @return bool
          * @throws
          */
-        public function checkActionClass($action)
+        public function checkActionClass($action, $parameters = null)
         {
             $actions = $this->actions();
             $className = false;
@@ -45,8 +46,9 @@
                     require_once CONTROLLERS.strtolower($this->name).DS.$actions[$action].'.php';
                     $className = $actions[$action];
                         /** @var Action $actionClass */
+
                     $actionClass = new $className($this);
-                    $actionClass->run();
+                    call_user_func_array(array($actionClass, 'run'), $parameters);
                 }
                 catch (ExtException $e) {
                     throw new ExtException($e->getMessage());

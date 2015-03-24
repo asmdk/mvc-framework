@@ -2,7 +2,56 @@
 
 class Route
 {
-    public static function start()
+    private $routes;
+
+    public function __construct($routes)
+    {
+        $this->routes = $routes;
+    }
+
+    private function getURI()
+    {
+        return $_SERVER['REQUEST_URI'];
+    }
+
+    public function run()
+    {
+        $uri = $this->getURI();
+
+        foreach($this->routes as $pattern => $route){
+            if(preg_match("~$pattern~", $uri)){
+                $internalRoute = preg_replace("~$pattern~", $route, $uri);
+                $segments = explode('/', $internalRoute);
+                array_shift($segments);
+                $controllerClass = ucfirst(array_shift($segments)).'Controller';
+                $actionSegment = array_shift($segments);
+                $actionName = 'action'.ucfirst($actionSegment);
+                $parameters = $segments;
+
+                // create controller
+                try {
+                    /** @var Controller $controller */
+                    $controller = new $controllerClass(str_replace('Controller', '', $controllerClass), str_replace('action', '', $actionName));
+                    $action = ($actionName == 'action') ? $actionName.$controller->defaultAction : $actionName;
+                    // call action
+                    if ($controller->checkActionClass($actionSegment, $parameters) === false) {
+                        // Вызываем действие контроллера с параметрами
+                        call_user_func_array(array($controller, $action), $parameters);
+                    }
+                }
+                catch (ExtException $e) {
+                    throw new ExtException($e->getMessage());
+                }
+            }
+        }
+
+        // Ничего не применилось. 404.
+        header("HTTP/1.0 404 Not Found");
+        return;
+    }
+
+    /** old route method is deprecated */
+    private function start()
     {
         // default controller and action
         $controllerClassName = is_null(Config::get('DefaultController')) ? '' : Config::get('DefaultController');
@@ -40,15 +89,16 @@ class Route
         // add prefix
         $controllerClass = $controllerClassName.'Controller';
         $actionName = 'action'.ucfirst($actionDefault);
-        
+
         // create controller
         try {
             /** @var Controller $controller */
-            $controller = new $controllerClass($controllerClassName, $actionDefault);
+            $controller = new $controllerClass(str_replace('Controller', '', $controllerClass), str_replace('action', '', $actionName));
             $action = ($actionName == 'action') ? $actionName.$controller->defaultAction : $actionName;
             // call action
-            if ($controller->checkActionClass($actionDefault) === false) {
-                $controller->$action();
+            if ($controller->checkActionClass($actionName, null) === false) {
+                // Вызываем действие контроллера с параметрами
+                $controller->{$action}($controller);
             }
         }
         catch (ExtException $e) {

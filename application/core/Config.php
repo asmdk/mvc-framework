@@ -12,9 +12,22 @@ class Config {
     private function __construct() {}
     private function __clone() {}
 
-    public static function set($key, $value)
+    /**
+     * set setting value
+     *
+     * @param $key
+     * @param $value
+     * @param bool $merge if value is array you vam merge with your array or replace
+     */
+    public static function set($key, $value, $merge = false)
     {
-        self::$settings[$key] = $value;
+        if (isset(self::$settings[$key]) && is_array(self::$settings[$key]) &&
+                is_array($value) && $merge) {
+            self::$settings[$key] = array_merge(self::$settings[$key], $value);
+        }
+        else {
+            self::$settings[$key] = $value;
+        }
     }
 
     public static function get($key = null) {
