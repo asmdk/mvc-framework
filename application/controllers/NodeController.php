@@ -24,14 +24,13 @@ class NodeController extends Controller {
 
     public function actionAdd()
     {
-        $model = new NodeModel();
-        $model->setAttributes(
-            array(
-                'title'=>'Заголовок 4',
-                'body'=>'Тело 4',
-            )
-        );
-        $model->save();
+        $attributes = App::$request->getPost('node', array());
+        if (!empty($attributes)) {
+            $model = new NodeModel();
+            $model->setAttributes($attributes);
+            $model->save();
+        }
+        $this->view->render('add', array('attributes'=>$attributes));
     }
 
     public function actionUpdate()
