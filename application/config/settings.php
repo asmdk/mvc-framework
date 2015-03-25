@@ -15,6 +15,6 @@
         'port'=>3306,
     ));
 
-    Config::set('controller_404', 'Main');
+    Config::set('controller_404', 'main');
     Config::set('action_404', 'errorPage');
     //Config::set('View', 'ViewTwig');

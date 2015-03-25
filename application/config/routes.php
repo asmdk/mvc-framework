@@ -7,6 +7,7 @@
  */
     Config::set('routes', array(
         '/'=>'main/index',
-        'node/([0-9]+)'=>'main/view/$1',
+        'node'=>'node/index',
+        'node/([0-9]+)'=>'node/view/$1',
         'node/export'=>'main/export',
     ));

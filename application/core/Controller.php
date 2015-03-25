@@ -56,10 +56,6 @@
             return $className;
         }
 
-        public function actionIndex() {
-
-        }
-
         public static function ErrorPage404()
         {
             //$host = 'http://'.$_SERVER['HTTP_HOST'].'/';

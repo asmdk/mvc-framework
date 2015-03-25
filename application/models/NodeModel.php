@@ -22,7 +22,7 @@ class NodeModel extends Model {
     {
         $sql = 'SELECT * FROM NODE';
         $nodes = $this->execute($sql);
-        return $nodes;
+        return $nodes->fetchAll();
     }
 
 }

@@ -44,9 +44,9 @@ class App {
         header("HTTP/1.0 404 Not Found");
         $errorController = Config::get('controller_404');
         $errorAction = Config::get('action_404');
-        if (!is_null($errorController) && class_exists($errorController.'Controller')) {
-            $errorController .= 'Controller';
-            $errorAction .= 'Action';
+        if (!is_null($errorController) && class_exists(ucfirst($errorController.'Controller'))) {
+            $errorController = ucfirst($errorController).'Controller';
+            $errorAction = 'action'.ucfirst($errorAction);
             /** @var Controller $controller */
             $controller = new $errorController($errorController, $errorAction);
             if (method_exists($controller, $errorAction)) {
