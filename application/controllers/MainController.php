@@ -51,4 +51,9 @@ class MainController extends Controller
         $result = $model->delete();
         var_dump($result);exit;
     }
+
+    public function errorPageAction()
+    {
+        echo '404';
+    }
 }

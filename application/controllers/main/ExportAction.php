@@ -10,6 +10,7 @@ class ExportAction extends Action {
 
     public function run()
     {
+        print_r(func_get_args());
         echo 'ActionExport';
     }
 

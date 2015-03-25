@@ -31,7 +31,7 @@ class ViewTwig extends View {
     protected function init()
     {
         $this->templateView = APPLICATION.'templates';
-        $this->tplFilePath = strtolower($this->controller->name).DS;
+        $this->tplFilePath = get_class($this->controller)!='Controller' ? strtolower($this->controller->name).DS : '';
         $this->cachePath = ROOT.DS.'compilation_cache';
         $this->includeTwig();
     }

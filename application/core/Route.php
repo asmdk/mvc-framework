@@ -3,6 +3,7 @@
 class Route
 {
     private $routes;
+    private $segments;
 
     public function __construct($routes)
     {
@@ -11,7 +12,8 @@ class Route
 
     private function getURI()
     {
-        return ($_SERVER['REQUEST_URI'] == '/') ? $_SERVER['REQUEST_URI'] : trim($_SERVER['REQUEST_URI'], '/');
+        $this->segments = parse_url($_SERVER['REQUEST_URI']);
+        return ($this->segments['path'] == '/') ? $this->segments['path'] : trim($this->segments['path'], '/');
     }
 
     public function run()
@@ -19,7 +21,7 @@ class Route
         $uri = $this->getURI();
 
         foreach($this->routes as $pattern => $route){
-            if(preg_match("~^$pattern~", $uri)) {
+            if(preg_match("~^$pattern$~", $uri)) {
                 $internalRoute = preg_replace("~$pattern~", $route, $uri);
                 $segments = explode('/', $internalRoute);
                 //array_shift($segments);
@@ -42,12 +44,12 @@ class Route
                 catch (ExtException $e) {
                     throw new ExtException($e->getMessage());
                 }
+                return;
             }
         }
 
-        // Ничего не применилось. 404.
-        header("HTTP/1.0 404 Not Found");
-        return;
+        // Page not found. 404.
+        App::pageNotFound();
     }
 
     /** old route method is deprecated */

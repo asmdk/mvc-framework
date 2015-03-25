@@ -15,8 +15,8 @@
 
         protected function init()
         {
-            $this->templateView = VIEWS.'layout'.DS.$this->controller->layout.'.php';
-            $this->tplFilePath = VIEWS.strtolower($this->controller->name).DS;
+            $this->templateView = get_class($this->controller)!='Controller' ? VIEWS.'layout'.DS.$this->controller->layout.'.php' : CORE_VIEWS.$this->controller->layout.'.php';
+            $this->tplFilePath = get_class($this->controller)!='Controller' ? VIEWS.strtolower($this->controller->name).DS : CORE_VIEWS;
         }
 
         public function setTplFilePath($path)

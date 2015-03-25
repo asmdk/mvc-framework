@@ -32,6 +32,34 @@ class App {
         self::$request = new Request();
         $route = new Route(Config::get('routes'));
         $route->run();
+        self::terminate();
+    }
+
+    public static function terminate()
+    {
+        exit();
+    }
+    public static function pageNotFound()
+    {
+        header("HTTP/1.0 404 Not Found");
+        $errorController = Config::get('controller_404');
+        $errorAction = Config::get('action_404');
+        if (!is_null($errorController) && class_exists($errorController.'Controller')) {
+            $errorController .= 'Controller';
+            $errorAction .= 'Action';
+            /** @var Controller $controller */
+            $controller = new $errorController($errorController, $errorAction);
+            if (method_exists($controller, $errorAction)) {
+                call_user_func_array(array($controller, $errorAction), array());
+                self::terminate();
+            }
+        }
+        $controller = new Controller('');
+        $controller->view->render('error404');
+    }
+    public static function createView($controller = null)
+    {
+        return !empty($viewClass) ? new $viewClass($controller) : new View($controller);
     }
 
     public static function autoload($class) {

@@ -10,12 +10,11 @@
 		public $actionName;
         public $defaultAction = 'Index';
 
-		function __construct($name, $actionName)
+		function __construct($name, $actionName = null)
 		{
 			$this->name = $name;
 			$this->actionName = !empty($actionName) ? $actionName : $this->defaultAction;
-            $viewClass = Config::get('View');
-			$this->view = !empty($viewClass) ? new $viewClass($this) : new View($this);
+			$this->view = App::createView($this);
 		}
 
         /** return array actions classes
