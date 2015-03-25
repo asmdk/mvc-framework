@@ -11,7 +11,7 @@ class Route
 
     private function getURI()
     {
-        return $_SERVER['REQUEST_URI'];
+        return ($_SERVER['REQUEST_URI'] == '/') ? $_SERVER['REQUEST_URI'] : trim($_SERVER['REQUEST_URI'], '/');
     }
 
     public function run()
@@ -19,10 +19,10 @@ class Route
         $uri = $this->getURI();
 
         foreach($this->routes as $pattern => $route){
-            if(preg_match("~$pattern~", $uri)){
+            if(preg_match("~^$pattern~", $uri)) {
                 $internalRoute = preg_replace("~$pattern~", $route, $uri);
                 $segments = explode('/', $internalRoute);
-                array_shift($segments);
+                //array_shift($segments);
                 $controllerClass = ucfirst(array_shift($segments)).'Controller';
                 $actionSegment = array_shift($segments);
                 $actionName = 'action'.ucfirst($actionSegment);
