@@ -59,6 +59,7 @@ class App {
     }
     public static function createView($controller = null)
     {
+        $viewClass = Config::get('View');
         return !empty($viewClass) ? new $viewClass($controller) : new View($controller);
     }
 

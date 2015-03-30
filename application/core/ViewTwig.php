@@ -9,13 +9,10 @@
 /**
  * view for use twig template in project
  * for use you need
- * 1. download twig:
- *  for example from github, https://github.com/fabpot/Twig/archive/master.zip
- *  copy Twig-master/lib/Twig folder to application/lib folder.
- * 2. set to settings.php View twig:
+ * 1. set to settings.php View twig:
  *  Config::set('View', 'ViewTwig');
- * 3. Create "templates" folder in "application" folder, when you create all your templates
- * 4. Create "compilation_cache" folder in "root" folder, for cache
+ * 2. Create "templates" folder in "application" folder, when you create all your templates
+ * 3. Create "compilation_cache" folder in "root" folder, for cache
  *
  * Now you can use twig.
  *
@@ -38,7 +35,7 @@ class ViewTwig extends View {
 
     protected function includeTwig()
     {
-        require_once LIB.'Twig'.DS.'Autoloader.php';
+        //require_once VENDOR.'twig\twig\lib\Twig'.DS.'Autoloader.php';
         Twig_Autoloader::register();
         $loader = new Twig_Loader_Filesystem($this->templateView);
         $this->twig = new Twig_Environment($loader, array(
@@ -47,7 +44,7 @@ class ViewTwig extends View {
         ));
     }
 
-    public function render($content_view, $data = null)
+    public function render($content_view, $data = array())
     {
         //twig template
         echo $this->twig->render(strtolower($this->controller->name).DS.$content_view.'.twig', $data);
