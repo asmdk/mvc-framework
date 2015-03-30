@@ -1,8 +1,14 @@
 {
+    "name": "asmdk/mvc-framework",
+    "type": "framework",
+    "description": "Simple mvc framework.",
+    "keywords": ["Simple", "mvc", "framework"],
+    "homepage": "http://www.under-city.com/",
+    "license": "MIT",
     "require": {
         "php":">=5.3.0",
         "twig/twig":">=1.18.0",
-        "mvc-framework/mvc-framework":"dev-master"
+        "asmdk/mvc-framework":"dev-master"
     },
     "repositories":[
         {
