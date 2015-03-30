@@ -1,0 +1,13 @@
+{
+    "require": {
+        "php":">=5.3.0",
+        "twig/twig":">=1.18.0",
+        "asmdk/mvc-framework":"dev-master"
+    },
+    "repositories":[
+        {
+            "type":"git",
+            "url":"https://github.com/asmdk/mvc-framework"
+        }
+    ]
+}
