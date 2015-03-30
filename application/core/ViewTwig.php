@@ -47,7 +47,7 @@ class ViewTwig extends View {
     public function render($content_view, $data = array())
     {
         //twig template
-        echo $this->twig->render(strtolower($this->controller->name).DS.$content_view.'.twig', $data);
+        echo $this->twig->render($this->tplFilePath.DS.$content_view.'.twig', $data);
     }
 
     public function renderPartial($content_view, $data = null, $return = false)

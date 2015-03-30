@@ -15,6 +15,15 @@
         'port'=>3306,
     ));
 
+    Config::set('doctrine', array(
+        'driver'=>'pdo_mysql',
+        'host'=>'localhost',
+        'dbname'=>'mvc',
+        'user'=>'root',
+        'password'=>'root',
+    ));
+    Config::set('doctrine_dev_mode', false);
+
     Config::set('controller_404', 'main');
     Config::set('action_404', 'errorPage');
-    //Config::set('View', 'ViewTwig');
+    Config::set('View', 'ViewTwig');
