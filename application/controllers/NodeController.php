@@ -10,16 +10,30 @@ class NodeController extends Controller {
 
     public function actionIndex()
     {
-        $model = new NodeModel();
-        $nodes = $model->getNodeList();
+        //$model = new NodeModel();
+        //$nodes = $model->getNodeList();
+
+        /** @var NodeRepository $nodeRepository */
+        $nodeRepository = $this->getEntityManager()->getRepository('Node');
+        $nodes = $nodeRepository->findAll();
+        $this->view->render('list', array('nodes'=>$nodes));
+    }
+
+    public function actionRandom()
+    {
+        /** @var NodeRepository $nodeRepository */
+        $nodeRepository = $this->getEntityManager()->getRepository('Node');
+        $nodes = $nodeRepository->getRandomNode();
         $this->view->render('list', array('nodes'=>$nodes));
     }
 
     public function actionView($id)
     {
-        $model = new NodeModel();
-        $model->findByPk($id);
-        $this->view->render('view', array('node'=>$model->getAttributes()));
+        //$model = new NodeModel();
+        //$model->findByPk($id);
+
+        $node = $this->getEntityManager()->getRepository('Node')->find($id);
+        $this->view->render('view', array('node'=>$node));
     }
 
     public function actionAdd()

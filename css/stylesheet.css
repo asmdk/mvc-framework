@@ -25,13 +25,22 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-    font-size: 24px;
+    font-size: 26px;
     padding: 20px 0;
+    text-transform: uppercase;
 }
 
 h2 {
     font-size: 16px;
     padding: 10px 0;
+}
+
+a {
+    color: #1C1E98;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
 }
 
 #content {
@@ -144,9 +153,9 @@ input:focus, textarea:focus {
 }
 
 input, textarea {
-    box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
-    -moz-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
-    -webkit-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
+    box-shadow: rgba(0,0,0, 0.1) 0 0 8px;
+    -moz-box-shadow: rgba(0,0,0, 0.1) 0 0 8px;
+    -webkit-box-shadow: rgba(0,0,0, 0.1) 0 0 8px;
 }
 
 .form label {
@@ -168,4 +177,16 @@ form.form .submit {
 }
 .submit input:hover {
     cursor: pointer;
+}
+
+/** record list */
+.records-list > li {
+    margin-bottom: 20px;
+}
+.records-list .list-title {
+    font-size: 20px;
+    padding-bottom: 5px;
+}
+.records-list .list-title:first-letter {
+    text-transform: uppercase;
 }

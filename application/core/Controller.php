@@ -10,12 +10,36 @@
 		public $actionName;
         public $defaultAction = 'Index';
 
+        /** @var  Doctrine\ORM\EntityManager */
+        protected $em = null;
+
 		function __construct($name, $actionName = null)
 		{
 			$this->name = $name;
 			$this->actionName = !empty($actionName) ? $actionName : $this->defaultAction;
 			$this->view = App::createView($this);
+            if (empty($this->em)) {
+                $this->em = $this->setEntityManager();
+            }
 		}
+
+        private function setEntityManager()
+        {
+            $paths = array(ENTITIES);
+            $proxyDir = CACHE.'proxy';
+            $isDevMode = Config::get('app_environment') == 'development';
+
+            // the connection configuration
+            $dbParams = Config::get('doctrine');
+            $config = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration($paths, $isDevMode, $proxyDir);
+            return Doctrine\ORM\EntityManager::create($dbParams, $config);
+        }
+
+        /** @return Doctrine\ORM\EntityManager */
+        protected function getEntityManager()
+        {
+            return $this->em;
+        }
 
         /** return array actions classes
          *  return array('action'=>'ExportAction')

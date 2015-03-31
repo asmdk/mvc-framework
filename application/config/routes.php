@@ -11,4 +11,5 @@
         'node/([0-9]+)'=>'node/view/$1',
         'node/add'=>'node/add',
         'node/export'=>'main/export',
+        'node/random'=>'node/random',
     ));

@@ -1,0 +1,14 @@
+{% extends "default.twig" %}
+{% block title %}Nodes list{% endblock %}
+{% block content %}
+    <h1>Nodes list</h1>
+
+    <ul id="nodeList" class="records-list">
+        {% for node in nodes %}
+            <li class="record">
+                <div class="list-title"><a href="/node/{{ node.nid }}">{{ node.title }}</a></div>
+                <div class="list-content">{{ node.body }}</div>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

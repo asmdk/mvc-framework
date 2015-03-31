@@ -23,8 +23,6 @@ class App {
 
     /** @var  Request */
     public static $request;
-    /** @var  Doctrine\ORM\EntityManager */
-    private static $_entityManager;
 
     private function __construct() {}
     private function __clone() {}
@@ -73,7 +71,11 @@ class App {
             }
             else if (file_exists(MODELS.$fileName)) {
                 include_once MODELS.$fileName;
-            } else if (file_exists(CONTROLLERS.$fileName)) {
+            } else if (file_exists(ENTITIES.DS.$fileName)) {
+                include_once ENTITIES.DS.$fileName;
+            } else if (file_exists(ENTITIES.DS.'repository'.DS.$fileName)) {
+                include_once ENTITIES.DS.'repository'.DS.$fileName;
+            }else if (file_exists(CONTROLLERS.$fileName)) {
                 include_once CONTROLLERS.$fileName;
             } else if (file_exists(EXTENSIONS.$fileName)) {
                 include_once EXTENSIONS.$fileName;
@@ -84,17 +86,6 @@ class App {
         catch (ExtException $e) {
             throw new ExtException($e->getMessage());
         }
-    }
-
-    private static function setEntityManager()
-    {
-        $paths = array(MODELS);
-        $isDevMode = Config::get('doctrine_dev_mode') ? true : false;
-
-        // the connection configuration
-        $dbParams = Config::get('doctrine');
-        $config = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration($paths, $isDevMode);
-        self::$_entityManager = Doctrine\ORM\EntityManager::create($dbParams, $config);
     }
 
 }
