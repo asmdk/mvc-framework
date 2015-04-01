@@ -19,6 +19,7 @@ class App {
           'Db'=>'Db.php',
           'ExtException'=>'classes/ExtException.php',
           'Request'=>'classes/Request.php',
+          'User'=>'classes/User.php',
     );
 
     /** @var  Request */
@@ -29,6 +30,7 @@ class App {
 
     public static function init()
     {
+        session_start();
         self::$request = new Request();
         $route = new Route(Config::get('routes'));
         $route->run();

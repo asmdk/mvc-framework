@@ -12,4 +12,5 @@
         'node/add'=>'node/add',
         'node/export'=>'main/export',
         'node/random'=>'node/random',
+        'user/login'=>'user/login',
     ));
