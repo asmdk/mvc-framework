@@ -10,13 +10,13 @@ class Messages {
 
     const ERROR_MSG = 'error';
     const WARNING_MSG = 'warning';
-    const CONFIRM_MSG = 'confirm';
+    const SUCCESS_MSG = 'success';
 
     const UNKNOWN_MSG = 'unknown';
 
     private $_errors = array();
     private $_warnings = array();
-    private $_confirm = array();
+    private $_success = array();
 
     private $_unknown = array();
 
@@ -27,7 +27,7 @@ class Messages {
         switch($type) {
             case self::ERROR_MSG: $this->_errors[] = $message; break;
             case self::WARNING_MSG: $this->_warnings[] = $message; break;
-            case self::CONFIRM_MSG: $this->_confirm[] = $message; break;
+            case self::SUCCESS_MSG: $this->_success[] = $message; break;
             default: $this->_unknown[] = $message;
         }
     }
@@ -37,7 +37,7 @@ class Messages {
         return array(
             self::ERROR_MSG => $this->_errors,
             self::WARNING_MSG => $this->_warnings,
-            self::CONFIRM_MSG => $this->_confirm,
+            self::SUCCESS_MSG => $this->_success,
         );
     }
 
@@ -53,7 +53,7 @@ class Messages {
 
     public function getConfirms()
     {
-        return $this->_confirm;
+        return $this->_success;
     }
 
     public function getUnknownMessages()

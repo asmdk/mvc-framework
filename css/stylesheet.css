@@ -201,3 +201,12 @@ div.messages.error {
     color: #8C2E0B;
     background-color: #FEF5F1;
 }
+div.messages.success {
+    border-color: #be7;
+    color: #234600;
+    background-color: #f8fff0;
+}
+div.messages.warning {
+    color: #840;
+    background-color: #fffce5;
+}
