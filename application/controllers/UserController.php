@@ -12,15 +12,14 @@ class UserController extends Controller {
     {
         $name = App::$request->getPost('name', null);
         $pass = App::$request->getPost('pass', null);
-        $message = null;
 
         if (app::$request->isPost()) {
             $aut = new User($name, $pass);
             if ($aut->getLogged()) $this->redirect('user/profile');
-            $message = 'Bad name or password!';
+            App::$messages->addMessage('Bad name or password!', Messages::ERROR_MSG);
         }
 
-        $this->view->render('login', array('message'=>$message));
+        $this->view->render('login');
     }
 
     public function actionProfile()

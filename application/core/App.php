@@ -20,6 +20,7 @@ class App {
           'ExtException'=>'classes/ExtException.php',
           'Request'=>'classes/Request.php',
           'User'=>'classes/User.php',
+          'Messages'=>'classes/Messages.php',
     );
 
     /** @var  Request */
@@ -27,6 +28,9 @@ class App {
 
     /** @var  User */
     public static $user;
+
+    /** @var  Messages */
+    public static $messages;
 
     private function __construct() {}
     private function __clone() {}
@@ -36,6 +40,7 @@ class App {
         session_start();
         self::$user = new User();
 
+        self::$messages = new Messages();
         self::$request = new Request();
         $route = new Route();
         $route->run();
