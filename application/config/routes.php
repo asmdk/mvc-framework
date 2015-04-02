@@ -13,4 +13,5 @@
         'node/export'=>'main/export',
         'node/random'=>'node/random',
         'user/login'=>'user/login',
+        'user/profile'=>'user/profile',
     ));

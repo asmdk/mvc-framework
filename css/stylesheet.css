@@ -190,3 +190,14 @@ form.form .submit {
 .records-list .list-title:first-letter {
     text-transform: uppercase;
 }
+
+/** messages */
+div.messages {
+    border: 1px solid currentColor;
+    margin: 15px 0;
+    padding: 10px 10px 10px 50px;
+}
+div.messages.error {
+    color: #8C2E0B;
+    background-color: #FEF5F1;
+}

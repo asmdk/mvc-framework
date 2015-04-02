@@ -88,4 +88,10 @@
             //header('Location:'.$host.'404');
         }
 
+        public function redirect($uri)
+        {
+            $uri = '/' . trim($uri, '/');
+            header('Location: '.$uri);
+        }
+
 	}

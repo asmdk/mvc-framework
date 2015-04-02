@@ -25,14 +25,19 @@ class App {
     /** @var  Request */
     public static $request;
 
+    /** @var  User */
+    public static $user;
+
     private function __construct() {}
     private function __clone() {}
 
     public static function init()
     {
         session_start();
+        self::$user = new User();
+
         self::$request = new Request();
-        $route = new Route(Config::get('routes'));
+        $route = new Route();
         $route->run();
         self::terminate();
     }

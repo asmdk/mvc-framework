@@ -12,10 +12,12 @@ class User {
     private $_pass;
     private $_ip;
     private $_sessionId;
+    private $_logged;
 
-    public $logged;
+    public $cookie;
+    public $data = null;
 
-    public function __construct($name = false, $pass = false)
+    public function __construct($name = null, $pass = null)
     {
         $this->_name = $name;
         $this->_pass = $pass;
@@ -26,12 +28,17 @@ class User {
 
     private function init()
     {
-        if ($this->_name && $this->_pass) {
-            $logined = $this->isLogined();
+        if (is_null($this->_name) && is_null($this->_pass)) {
+            $this->_logged  = $this->isLogined();
         } else {
-            $logined = $this->checkAccess($this->_name, $this->_pass);
+            $this->_logged  = $this->checkAccess($this->_name, $this->_pass);
         }
-        $this->logged = $logined;
+        $this->cookie = $_COOKIE;
+    }
+
+    public function getLogged()
+    {
+        return $this->_logged;
     }
 
     public function isLogined()
@@ -41,7 +48,12 @@ class User {
 
     private function checkSessionData($key)
     {
-        return (isset($_SESSION[$key]) && isset($_COOKIE[$key]) && $_SESSION[$key] == $_COOKIE[$key]);
+        $logged = (isset($_SESSION[$key]) && isset($_COOKIE[$key]) && $_SESSION[$key] == $_COOKIE[$key]);
+        if ($logged) {
+            $userData = $this->getUserData($_SESSION['name']);
+            $this->data = $userData !== false ? $userData['data'] : null;
+        }
+        return $logged;
     }
 
     private function setSessionData($key, $value)
@@ -50,17 +62,32 @@ class User {
         setcookie($key, $value);
     }
 
+    private function getUserData($name) {
+        $users = array(
+            'user'=>array(
+                'password'=>'12345',
+                'data'=>array(
+                    'name'=>'user',
+                    'surname'=>'users',
+                    'group'=>'admin',
+                    'age'=>22,
+                    'reg_date'=>date('d.m.Y', strtotime('17.06.1897')),
+                ),
+            ),
+        );
+        return (isset($users[$name])) ? $users[$name] : false;
+    }
+
     private function checkAccess($name, $pass)
     {
         $logged = false;
-        $users = array(
-            'user'=>'12345',
-        );
+        $userData = $this->getUserData($name);
 
-        if (isset($users[$name]) && $users[$name] == $pass) {
+        if ($userData !== false && $userData['password'] == $pass) {
             $this->setSessionData('name', $this->_name);
-            $this->setSessionData('ip', $this->_name);
-            $this->setSessionData('session_id', $this->_name);
+            $this->setSessionData('ip', $this->_ip);
+            $this->setSessionData('session_id', $this->_sessionId);
+            $this->data = $userData;
             $logged = true;
         }
 

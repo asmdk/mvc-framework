@@ -5,7 +5,9 @@
 {% block content %}
     <h1>Login Form</h1>
 
-    <div class="message">{{ message }}</div>
+    {% if message is not null %}
+        <div class="messages error">{{ message }}</div>
+    {% endif %}
 
     <div id="header_lower">
         <div id="header_content_boxcontent">
