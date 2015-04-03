@@ -9,18 +9,24 @@
 class App {
 
     private static $_coreClasses = array(
-          'Model'=>'Model.php',
-          'View'=>'View.php',
-          'ViewTwig'=>'ViewTwig.php',
-          'Controller'=>'Controller.php',
-          'Action'=>'Action.php',
-          'Route'=>'Route.php',
-          'Config'=>'Config.php',
-          'Db'=>'Db.php',
-          'ExtException'=>'classes/ExtException.php',
-          'Request'=>'classes/Request.php',
-          'User'=>'classes/User.php',
-          'Messages'=>'classes/Messages.php',
+        //core classes
+        'Model'=>'Model.php',
+        'View'=>'View.php',
+        'ViewTwig'=>'ViewTwig.php',
+        'Controller'=>'Controller.php',
+        'Action'=>'Action.php',
+        'Route'=>'Route.php',
+        'Config'=>'Config.php',
+        'Db'=>'Db.php',
+        //advanced classes
+        'ExtException'=>'classes/ExtException.php',
+        'Request'=>'classes/Request.php',
+        'User'=>'classes/User.php',
+        'Messages'=>'classes/Messages.php',
+    );
+
+    private static $_twigExtensions = array(
+        'MessageExtension',
     );
 
     /** @var  Request */
@@ -45,6 +51,11 @@ class App {
         $route = new Route();
         $route->run();
         self::terminate();
+    }
+
+    public static function getTwigExtensions()
+    {
+        return self::$_twigExtensions;
     }
 
     public static function terminate()
@@ -80,6 +91,9 @@ class App {
         try {
             if (isset(self::$_coreClasses[$class])) {
                 require_once CORE.self::$_coreClasses[$class];
+            }
+            else if (in_array($class, self::$_twigExtensions)) {
+                require_once CORE.'twig'.DS.$class.'.php';
             }
             else if (file_exists(MODELS.$fileName)) {
                 include_once MODELS.$fileName;
