@@ -24,17 +24,7 @@
         <div id="content">
 
             {% block messages %}
-                {% for mtype, message in messages.getMessages() %}
-                    {% if message is not empty %}
-                        <div class="messages {{ mtype }}">
-                            <ul>
-                                {% for text in message %}
-                                    <li>{{ text }}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    {% endif %}
-                {% endfor %}
+                {{ show_messages(messages.getMessages()) }}
             {% endblock %}
 
             {% block content %}

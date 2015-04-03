@@ -43,6 +43,16 @@ class ViewTwig extends View {
             'auto_reload' => true,
             'debug'       => Config::get('app_environment') == 'development',
         ));
+
+        //add core twig extensions
+        $twigExt = App::getTwigExtensions();
+        if (!empty($twigExt)) {
+            foreach($twigExt as $ext) {
+                $this->twig->addExtension(new $ext);
+            }
+        }
+
+        //add global variables
         $this->twig->addGlobal('messages', App::$messages);
         $this->twig->addGlobal('controller', $this->controller);
 
