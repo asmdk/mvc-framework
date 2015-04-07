@@ -55,6 +55,8 @@ class ViewTwig extends View {
         //add global variables
         $this->twig->addGlobal('messages', App::$messages);
         $this->twig->addGlobal('controller', $this->controller);
+        $this->twig->addGlobal('user', App::$user);
+        $this->twig->addGlobal('request', App::$request);
 
         //add debug
         if (Config::get('app_environment') == 'development') {
