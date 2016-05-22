@@ -9,32 +9,53 @@
 class App {
 
     private static $_coreClasses = array(
-          'Model'=>'Model.php',
-          'View'=>'View.php',
-          'ViewTwig'=>'ViewTwig.php',
-          'Controller'=>'Controller.php',
-          'Action'=>'Action.php',
-          'Route'=>'Route.php',
-          'Config'=>'Config.php',
-          'Db'=>'Db.php',
-          'ExtException'=>'classes/ExtException.php',
-          'Request'=>'classes/Request.php',
+        //core classes
+        'Model'=>'Model.php',
+        'View'=>'View.php',
+        'ViewTwig'=>'ViewTwig.php',
+        'Controller'=>'Controller.php',
+        'Action'=>'Action.php',
+        'Route'=>'Route.php',
+        'Config'=>'Config.php',
+        'Db'=>'Db.php',
+        //advanced classes
+        'ExtException'=>'classes/ExtException.php',
+        'Request'=>'classes/Request.php',
+        'User'=>'classes/User.php',
+        'Messages'=>'classes/Messages.php',
+    );
+
+    private static $_twigExtensions = array(
+        'MessageExtension',
     );
 
     /** @var  Request */
     public static $request;
-    /** @var  Doctrine\ORM\EntityManager */
-    private static $_entityManager;
+
+    /** @var  User */
+    public static $user;
+
+    /** @var  Messages */
+    public static $messages;
 
     private function __construct() {}
     private function __clone() {}
 
     public static function init()
     {
+        session_start();
+        self::$user = new User();
+
+        self::$messages = new Messages();
         self::$request = new Request();
-        $route = new Route(Config::get('routes'));
+        $route = new Route();
         $route->run();
         self::terminate();
+    }
+
+    public static function getTwigExtensions()
+    {
+        return self::$_twigExtensions;
     }
 
     public static function terminate()
@@ -71,9 +92,16 @@ class App {
             if (isset(self::$_coreClasses[$class])) {
                 require_once CORE.self::$_coreClasses[$class];
             }
+            else if (in_array($class, self::$_twigExtensions)) {
+                require_once CORE.'twig'.DS.$class.'.php';
+            }
             else if (file_exists(MODELS.$fileName)) {
                 include_once MODELS.$fileName;
-            } else if (file_exists(CONTROLLERS.$fileName)) {
+            } else if (file_exists(ENTITIES.DS.$fileName)) {
+                include_once ENTITIES.DS.$fileName;
+            } else if (file_exists(ENTITIES.DS.'repository'.DS.$fileName)) {
+                include_once ENTITIES.DS.'repository'.DS.$fileName;
+            }else if (file_exists(CONTROLLERS.$fileName)) {
                 include_once CONTROLLERS.$fileName;
             } else if (file_exists(EXTENSIONS.$fileName)) {
                 include_once EXTENSIONS.$fileName;
@@ -84,17 +112,6 @@ class App {
         catch (ExtException $e) {
             throw new ExtException($e->getMessage());
         }
-    }
-
-    private static function setEntityManager()
-    {
-        $paths = array(MODELS);
-        $isDevMode = Config::get('doctrine_dev_mode') ? true : false;
-
-        // the connection configuration
-        $dbParams = Config::get('doctrine');
-        $config = Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration($paths, $isDevMode);
-        self::$_entityManager = Doctrine\ORM\EntityManager::create($dbParams, $config);
     }
 
 }

@@ -29,7 +29,7 @@ class ViewTwig extends View {
     {
         $this->templateView = APPLICATION.'templates';
         $this->tplFilePath = get_class($this->controller)!='Controller' ? strtolower($this->controller->name).DS : '';
-        $this->cachePath = ROOT.DS.'compilation_cache';
+        $this->cachePath = CACHE.'twig';
         $this->includeTwig();
     }
 
@@ -41,7 +41,27 @@ class ViewTwig extends View {
         $this->twig = new Twig_Environment($loader, array(
             'cache'       => $this->cachePath,
             'auto_reload' => true,
+            'debug'       => Config::get('app_environment') == 'development',
         ));
+
+        //add core twig extensions
+        $twigExt = App::getTwigExtensions();
+        if (!empty($twigExt)) {
+            foreach($twigExt as $ext) {
+                $this->twig->addExtension(new $ext);
+            }
+        }
+
+        //add global variables
+        $this->twig->addGlobal('messages', App::$messages);
+        $this->twig->addGlobal('controller', $this->controller);
+        $this->twig->addGlobal('user', App::$user);
+        $this->twig->addGlobal('request', App::$request);
+
+        //add debug
+        if (Config::get('app_environment') == 'development') {
+            $this->twig->addExtension(new Twig_Extension_Debug());
+        }
     }
 
     public function render($content_view, $data = array())

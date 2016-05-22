@@ -1,0 +1,29 @@
+{% extends "default.twig" %}
+
+{% block title %}Login Form{% endblock %}
+
+{% block content %}
+    <h1>Login Form</h1>
+
+    {% if message is not null %}
+        <div class="messages error">{{ message }}</div>
+    {% endif %}
+
+    <div id="header_lower">
+        <div id="header_content_boxcontent">
+            <form class="form" method="post">
+                <div class="row row-block" id="fieldNameContainer">
+                    <label for="fieldName">Name</label>
+                    <input id="fieldName" type="text" name="name" value="">
+                </div>
+                <div class="row row-block" id="fieldPassContainer">
+                    <label for="fieldPass">Password</label>
+                    <input id="fieldPass" type="password" name="pass" value="">
+                </div>
+                <div class="submit">
+                    <input type="submit" value="Send" />
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

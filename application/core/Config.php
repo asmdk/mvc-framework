@@ -37,4 +37,23 @@ class Config {
         }
         return $value;
     }
+
+    /**
+     * Return array of settings values
+     *
+     * @param $keys
+     * @return array
+     */
+    public static function getParams($keys)
+    {
+        $result = array();
+        if (!is_array($keys))  {
+            $keys = array($keys);
+        }
+        foreach($keys as $key) {
+            $result[] = self::get($key);
+        }
+        return $result;
+    }
+
 }

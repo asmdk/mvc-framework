@@ -2,27 +2,28 @@
 
 class Route
 {
-    private $routes;
-    private $segments;
+    private $_routes;
+    private $_segments;
+    private $_uri;
 
-    public function __construct($routes)
+    public function __construct($uri = null)
     {
-        $this->routes = $routes;
+        $this->_routes = Config::get('routes');
+        $this->_uri = $this->getURI($uri);
     }
 
-    private function getURI()
+    private function getURI($uri)
     {
-        $this->segments = parse_url($_SERVER['REQUEST_URI']);
-        return ($this->segments['path'] == '/') ? $this->segments['path'] : trim($this->segments['path'], '/');
+        $uri = is_null($uri) ? $_SERVER['REQUEST_URI'] : $uri;
+        $this->_segments = parse_url($uri);
+        return ($this->_segments['path'] == '/') ? $this->_segments['path'] : trim($this->_segments['path'], '/');
     }
 
     public function run()
     {
-        $uri = $this->getURI();
-
-        foreach($this->routes as $pattern => $route){
-            if(preg_match("~^$pattern$~", $uri)) {
-                $internalRoute = preg_replace("~$pattern~", $route, $uri);
+        foreach($this->_routes as $pattern => $route){
+            if(preg_match("~^$pattern$~", $this->_uri)) {
+                $internalRoute = preg_replace("~$pattern~", $route, $this->_uri);
                 $segments = explode('/', $internalRoute);
                 //array_shift($segments);
                 $controllerClass = ucfirst(array_shift($segments)).'Controller';

@@ -18,4 +18,9 @@ class MainController extends Controller
     {
         echo '404';
     }
+
+    public function actionAbout()
+    {
+        $this->view->render('about');
+    }
 }

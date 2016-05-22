@@ -21,8 +21,9 @@
         'dbname'=>'mvc',
         'user'=>'root',
         'password'=>'root',
+        'charset' => 'utf8',
     ));
-    Config::set('doctrine_dev_mode', false);
+    Config::set('app_environment', 'development');
 
     Config::set('controller_404', 'main');
     Config::set('action_404', 'errorPage');
